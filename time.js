@@ -64,17 +64,24 @@ Time.prototype.convertDBTimeToUnix = function (db_time) {
 
 
     function getUnixFromOffsetHour(unix, offset) {
-        if (offset.indexOf("+") >= 0) {
-            var hour = offset.replace("+", "");
-            hour = Number.parseInt(hour);
-            return unix - (hour * 60 * 60);
+
+        try {
+            if (offset.indexOf("+") >= 0) {
+                var hour = offset.replace("+", "");
+                hour = Number.parseInt(hour);
+                return unix - (hour * 60 * 60);
+            }
+
+            if (offset.indexOf("-") >= 0) {
+                var hour = offset.replace("-", "");
+                hour = Number.parseInt(hour);
+                return unix + (hour * 60 * 60);
+            }
+        } catch (err) {
+
         }
 
-        if (offset.indexOf("-") >= 0) {
-            var hour = offset.replace("-", "");
-            hour = Number.parseInt(hour);
-            return unix + (hour * 60 * 60);
-        }
+        return unix;
     }
 
     function dbToTimeUnix(strDate) {
@@ -358,6 +365,7 @@ Time.prototype.getInputFromUnix = function (unixtimestamp) {
 var Time = new Time();
 
 var end = "Apr 09 2018 08:00:00 GMT +0800 (+08)";
+var end = "Tue Mar 27 2018 03:11:25 GMT+0000 (UTC)";
 var endUnix = Time.convertDBTimeToUnix(end);
 console.log("convertDBTimeToUnix", endUnix);
 
