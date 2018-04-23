@@ -47,6 +47,7 @@ Time.prototype.getUnixTimestampNow = function () {
     return Math.round(date.getTime() / 1000);
 };
 
+
 Time.prototype.convertDBTimeToUnix = function (db_time) {
     //return Date.parse(db_time) / 1000;
 
@@ -64,17 +65,23 @@ Time.prototype.convertDBTimeToUnix = function (db_time) {
 
 
     function getUnixFromOffsetHour(unix, offset) {
-        if (offset.indexOf("+") >= 0) {
-            var hour = offset.replace("+", "");
-            hour = Number.parseInt(hour);
-            return unix - (hour * 60 * 60);
-        }
 
-        if (offset.indexOf("-") >= 0) {
-            var hour = offset.replace("-", "");
-            hour = Number.parseInt(hour);
-            return unix + (hour * 60 * 60);
-        }
+        try {
+            if (offset.indexOf("+") >= 0) {
+                var hour = offset.replace("+", "");
+                hour = Number.parseInt(hour);
+                return unix - (hour * 60 * 60);
+            }
+
+            if (offset.indexOf("-") >= 0) {
+                var hour = offset.replace("-", "");
+                hour = Number.parseInt(hour);
+                return unix + (hour * 60 * 60);
+            }
+
+        } catch (err) { }
+
+        return unix;
     }
 
     function dbToTimeUnix(strDate) {
@@ -143,7 +150,7 @@ Time.prototype.convertDBTimeToUnix = function (db_time) {
                 if (yr < 30) yr = 2000 + parseFloat(yr);
                 if (yr < 200) yr = 1900 + parseFloat(yr);
                 var usedGMT = 0;
-                if (((strDate.toUpperCase().indexOf('GMT') > 0) || (strDate.toUpperCase().indexOf('UTC') > 0)) && (strDate.toUpperCase().indexOf('GMT+') == -1) && (strDate.toUpperCase().indexOf('UTC+') == -1)) {
+                if (strDate.toUpperCase().indexOf('GMT') >= 0) {
                     date = new Date(Date.UTC(yr, mnth - 1, dy, hr, mn, sec));
                     var strArr = strDate.split("(");
                     strArr = strArr[1].split(")");
@@ -157,11 +164,14 @@ Time.prototype.convertDBTimeToUnix = function (db_time) {
         }
 
         var unix = (date.getTime() / 1000.0);
+
         return getUnixFromOffsetHour(unix, offsetHourGMT);
     }
 
     return dbToTimeUnix(db_time);
 };
+
+
 
 
 Time.prototype.getAgo = function (unixtimestamp) {
@@ -352,14 +362,49 @@ Time.prototype.getInputFromUnix = function (unixtimestamp) {
     return r;
 };
 
+// timezone : MYT, EST
+Time.prototype.getStringWithTimezone = function (unixtimestamp, timezone) {
+    //Time.getStringWithTimezone("now", "MYT")
+    
+    var TZ = {
+        MYT: +8,
+        EST: -5,
+        EDT: -4
+    }
+
+    if (unixtimestamp <= 0 || unixtimestamp === null || unixtimestamp === "") {
+        return "";
+    }
+
+    if (unixtimestamp === "now") {
+        unixtimestamp = this.getUnixTimestampNow();
+    }
+
+    if (typeof unixtimestamp === "string") {
+        if (Number.isNaN(Number.parseInt(unixtimestamp))) {
+            unixtimestamp = this.convertDBTimeToUnix(unixtimestamp);
+        }
+    }
+
+    var d = new Date();
+    var defaultOffset = d.getTimezoneOffset() / 60;
+    var offset = defaultOffset + TZ[timezone];
+    unixtimestamp = unixtimestamp + (offset * 60 * 60);
+
+    var r = `${this.getString(unixtimestamp)} (${timezone})`;
+    console.log(r);
+
+    return r;
+}
 
 
 //export var Time = new Time();
 var Time = new Time();
-
-var end = "Apr 09 2018 08:00:00 GMT +0800 (+08)";
-var endUnix = Time.convertDBTimeToUnix(end);
-console.log("convertDBTimeToUnix", endUnix);
+Time.getStringWithTimezone("now", "MYT")
+Time.getStringWithTimezone("now", "EDT")
+// var end = "Apr 09 2018 08:00:00 GMT +0800 (+08)";
+// var endUnix = Time.convertDBTimeToUnix(end);
+// console.log("convertDBTimeToUnix", endUnix);
 
 
 //module.exports = { Time };
