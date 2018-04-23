@@ -78,8 +78,14 @@ Time.prototype.convertDBTimeToUnix = function (db_time) {
                 hour = Number.parseInt(hour);
                 return unix + (hour * 60 * 60);
             }
+<<<<<<< HEAD:js/time.js
 
         } catch (err) { }
+=======
+        } catch (err) {
+
+        }
+>>>>>>> 8c75241ff7b0562b961dab63f2cbb06f1d8444e1:time.js
 
         return unix;
     }
@@ -400,11 +406,19 @@ Time.prototype.getStringWithTimezone = function (unixtimestamp, timezone) {
 
 //export var Time = new Time();
 var Time = new Time();
+<<<<<<< HEAD:js/time.js
 Time.getStringWithTimezone("now", "MYT")
 Time.getStringWithTimezone("now", "EDT")
 // var end = "Apr 09 2018 08:00:00 GMT +0800 (+08)";
 // var endUnix = Time.convertDBTimeToUnix(end);
 // console.log("convertDBTimeToUnix", endUnix);
+=======
+
+var end = "Apr 09 2018 08:00:00 GMT +0800 (+08)";
+var end = "Tue Mar 27 2018 03:11:25 GMT+0000 (UTC)";
+var endUnix = Time.convertDBTimeToUnix(end);
+console.log("convertDBTimeToUnix", endUnix);
+>>>>>>> 8c75241ff7b0562b961dab63f2cbb06f1d8444e1:time.js
 
 
 //module.exports = { Time };
