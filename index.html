@@ -2,11 +2,85 @@
 <html>
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="./js/anime.min.js"></script>
     <meta http-equiv="expires" content="0">
 </head>
 
 <body>
-    Welcome To My Test Page
+    <div style="display: flex;">
+        <div class="animate-btn-container">
+            <div id="yo" class="animate-btn"></div>
+        </div>
+        <div class="animate-btn-container">
+            <div id="yo2" class="animate-btn"></div>
+        </div>
+        <div class="animate-btn-container">
+            <div id="yo3" class="animate-btn"></div>
+        </div>
+    </div>
+    <style>
+        .animate-btn-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 60px;
+            height: 60px;
+        }
+
+        .animate-btn {
+            width: 40px;
+            height: 40px;
+            background: cornflowerblue;
+            border-radius: 100%
+        }
+    </style>
+
+    <script>
+        function animeExec(target, prop, duration = 2000, loop = false) {
+            var animeObj = {
+                targets: target,
+                loop: loop
+            };
+
+            for (var k in prop) {
+                animeObj[k] = prop[k];
+            }
+
+            anime(animeObj);
+        }
+
+
+        function pulse(target) {
+            var expandRate = 400;
+            var contractRate = 500;
+            var offset = 6;
+            var prop = {
+                translateY: [
+                    { value: `+=${offset}`, duration: contractRate },
+                    { value: `-=${offset}`, duration: expandRate },
+                ],
+              
+                width: [
+                    { value: `+=${offset}`, duration: expandRate },
+                    { value: `-=${offset}`, duration: contractRate },
+                ],
+                height: [
+                    { value: `+=${offset}`, duration: expandRate },
+                    { value: `-=${offset}`, duration: contractRate },
+                ],
+                //easing: 'easeInSine'
+            };
+
+            animeExec(target, prop, 2000, true);
+        }
+
+        pulse("#yo");
+        pulse("#yo2");
+        pulse("#yo3");
+
+    </script> Welcome To My Test Page
     <br> Waze ID : 66519068.665321754.552260
     <br> POINT : 2.8187772 , 101.5165589
     <a href='whatsapp://send?text=Text to send with message: https://es021.github.io/e-invite/public/index.html'>
@@ -15,7 +89,7 @@
     <a href="waze://?q=Dewan+Sri+Jugra+Jalan+Mahkamah,+Banting,ll=2.8187772,101.5165589,&navigate=yes">
         WAZE</a>
     <br>
-    <a href = "http://maps.google.com/?daddr=Dewan+Sri+Jugra+Jalan+Mahkamah,+Banting">
+    <a href="http://maps.google.com/?daddr=Dewan+Sri+Jugra+Jalan+Mahkamah,+Banting">
         GOOGLE MAPS</a>
 </body>
 <!-- <script src="time.js"></script> -->
