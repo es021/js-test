@@ -52,14 +52,15 @@
         }
 
 
-        function pulse(target) {
+        function pulse(target, cycleLength = 2000) {
             var expandRate = 400;
             var contractRate = 500;
-            var offset = 6;
+            var offset = 4;
+            var translate = 6;
             var prop = {
                 translateY: [
-                    { value: `+=${offset}`, duration: contractRate },
-                    { value: `-=${offset}`, duration: expandRate },
+                    { value: `+=${translate}`, duration: contractRate },
+                    { value: `-=${translate}`, duration: expandRate },
                 ],
               
                 width: [
@@ -70,15 +71,15 @@
                     { value: `+=${offset}`, duration: expandRate },
                     { value: `-=${offset}`, duration: contractRate },
                 ],
-                //easing: 'easeInSine'
+                //easing: 'easeInQuad'
             };
 
-            animeExec(target, prop, 2000, true);
+            animeExec(target, prop, cycleLength, true);
         }
 
         pulse("#yo");
-        pulse("#yo2");
-        pulse("#yo3");
+        //pulse("#yo2");
+        //pulse("#yo3");
 
     </script> Welcome To My Test Page
     <br> Waze ID : 66519068.665321754.552260
